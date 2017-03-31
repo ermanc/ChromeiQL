@@ -1,12 +1,7 @@
-
-/**
- * This GraphiQL example illustrates how to use some of GraphiQL's props
- * in order to enable reading and updating the URL parameters, making
- * link sharing of queries a little bit easier.
- *
- * This is only one example of this kind of feature, GraphiQL exposes
- * various React params to enable interesting integrations.
- */
+import React from 'react';
+import ReactDOM from 'react-dom';
+import GraphiQL from 'graphiql';
+import _ from 'lodash';
 
 // Shortcut for React.createElement...
 var rc = _.partial(React.createElement);
