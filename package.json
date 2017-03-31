@@ -1,0 +1,24 @@
+{
+  "name": "chromeiql",
+  "version": "1.0.0",
+  "description": "Thin multi-endpoint wrapper for GraphiQL as a Chrome extension",
+  "main": "js/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ermanc/ChromeiQL.git"
+  },
+  "keywords": [
+    "graphql",
+    "graphiql",
+    "chromeiql"
+  ],
+  "author": "Erman Celen <ermancelen@gmail.com> (https://github.com/ermanc)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ermanc/ChromeiQL/issues"
+  },
+  "homepage": "https://github.com/ermanc/ChromeiQL#readme"
+}
