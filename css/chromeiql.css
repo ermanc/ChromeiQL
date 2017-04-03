@@ -19,12 +19,12 @@ body {
 }
 
 #url-bar {
-  width: 500px;
+  width: 600px;
   position: absolute;
   text-align: center;
   margin-top: 5px;
   left: 50%;
-  margin-left: -250px;
+  margin-left: -300px;
 }
 
 #url-box, #url-save-button {
@@ -34,6 +34,16 @@ body {
 }
 
 #url-box {
-  width: 400px;
-  margin-right: 10px;
+  width: 500px;
+  margin-right: 2px;
+  border-radius: 4px;
+  margin-right: 2px;
+  padding: 0 4px;
+  border: 1px none;
+  border-style: inset;
+  color: #555;
+}
+
+#url-save-button {
+  padding: 6px 12px;
 }
