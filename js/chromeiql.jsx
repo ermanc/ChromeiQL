@@ -2,15 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import GraphiQL from 'graphiql';
 import _ from 'lodash';
+import $ from 'jquery';
 
 // Shortcut for React.createElement...
-var rc = _.partial(React.createElement);
+let rc = _.partial(React.createElement);
 
 // Parse the search string to get url parameters.
-var search = window.location.search;
-var parameters = {};
+let search = window.location.search;
+let parameters = {};
 search.substr(1).split('&').forEach(function (entry) {
-  var eq = entry.indexOf('=');
+  let eq = entry.indexOf('=');
   if (eq >= 0) {
     parameters[decodeURIComponent(entry.slice(0, eq))] =
       decodeURIComponent(entry.slice(eq + 1));
@@ -41,7 +42,7 @@ function onEditVariables(newVariables) {
 }
 
 function updateURL() {
-  var newSearch = '?' + Object.keys(parameters).map(function (key) {
+  let newSearch = '?' + Object.keys(parameters).map(function (key) {
     return encodeURIComponent(key) + '=' +
       encodeURIComponent(parameters[key]);
   }).join('&');
@@ -56,32 +57,35 @@ function graphQLFetcher(endpoint) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(graphQLParams),
       credentials: 'include',
-    }).then(function (response) {
-      return response.json()
-    });
+    }).then(response => response.json());
   }
 }
 
-var ChromeiQL = React.createClass({
-  getInitialState: function() {
-    return {
+class ChromeiQL extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       currentEndpoint: null,
       newEndpoint: this.props.endpoint
     };
-  },
 
-  render: function() {
-    var graphqlConsole = null;
-    var endpoint = this.state.currentEndpoint || this.state.newEndpoint;
+    this.updateEndpointState = this.updateEndpointState.bind(this)
+    this.setEndpoint = this.setEndpoint.bind(this)
+    this.updateEndpoint = this.updateEndpoint.bind(this)
+  }
+
+  render() {
+    const endpoint = this.state.currentEndpoint || this.state.newEndpoint;
+    let graphqlConsole = null;
     if (endpoint) {
-      graphqlConsole = rc(GraphiQL, {
-        id: "graphiql",
-        fetcher: graphQLFetcher(endpoint),
-        query: parameters.query,
-        variables: parameters.variables,
-        onEditQuery: onEditQuery,
-        onEditVariables: onEditVariables
-      });
+      graphqlConsole =
+        <GraphiQL
+          id = "graphiql"
+          fetcher = {graphQLFetcher(endpoint)}
+          query = {parameters.query}
+          variables = {parameters.variables}
+          onEditQuery = {onEditQuery}
+          onEditVariables = {onEditVariables} />;
     }
 
     if (this.state.newEndpoint) {
@@ -89,24 +93,29 @@ var ChromeiQL = React.createClass({
     }
 
     return (
-      rc('div', {id: "application"},
-        rc('div', {id: "url-bar"},
-          rc('input', {type: "text", id: "url-box", defaultValue: endpoint, onChange: this.updateEndpoint}),
-          rc('button', {id: "url-save-button", onClick: this.setEndpoint}, "Set endpoint")
-        ),
-        graphqlConsole
-      )
+      <div id = "application">
+        <div id="url-bar" className="graphiql-container" >
+          <input type="text" id="url-box" defaultValue={endpoint} onChange={this.updateEndpoint} />
+          <a id="url-save-button" className="toolbar-button" onClick={this.setEndpoint}>
+            Set endpoint
+          </a>
+        </div>
+        { graphqlConsole }
+      </div>
     );
-  },
+  }
 
-  updateEndpointState: function() {
-    this.setState({ currentEndpoint: this.state.newEndpoint, newEndpoint: null });
+  updateEndpointState() {
+    this.setState({
+      currentEndpoint: this.state.newEndpoint,
+      newEndpoint: null
+    });
     $('button.execute-button').click();
-  },
+  }
 
-  setEndpoint: function() {
-    var newEndpoint = window.chromeiqlEndpoint;
-    var setState = this.setState.bind(this);
+  setEndpoint() {
+    let newEndpoint = window.chromeiqlEndpoint;
+    let setState = this.setState.bind(this);
     chrome.storage.local.set(
       {"chromeiqlEndpoint": newEndpoint},
       function () {
@@ -115,12 +124,12 @@ var ChromeiQL = React.createClass({
         }
       }
     );
-  },
+  }
 
-  updateEndpoint: function(e) {
+  updateEndpoint(e) {
     window.chromeiqlEndpoint = e.target.value;
   }
-});
+}
 
 chrome.storage.local.get("chromeiqlEndpoint", function(storage) {
   // Render <GraphiQL /> into the body.
