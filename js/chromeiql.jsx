@@ -4,8 +4,8 @@ import GraphiQL from 'graphiql';
 import _ from 'lodash';
 import $ from 'jquery';
 
-// Shortcut for React.createElement...
-let rc = _.partial(React.createElement);
+// Buffer for endpoint entry value
+let chromeiqlEndpoint;
 
 // Parse the search string to get url parameters.
 let search = window.location.search;
@@ -65,17 +65,16 @@ class ChromeiQL extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentEndpoint: null,
-      newEndpoint: this.props.endpoint
+      prevEndpoint: null,
+      currEndpoint: this.props.endpoint,
     };
 
-    this.updateEndpointState = this.updateEndpointState.bind(this)
     this.setEndpoint = this.setEndpoint.bind(this)
     this.updateEndpoint = this.updateEndpoint.bind(this)
   }
 
   render() {
-    const endpoint = this.state.currentEndpoint || this.state.newEndpoint;
+    const endpoint = this.state.currEndpoint
     let graphqlConsole = null;
     if (endpoint) {
       graphqlConsole =
@@ -88,8 +87,10 @@ class ChromeiQL extends React.Component {
           onEditVariables = {onEditVariables} />;
     }
 
-    if (this.state.newEndpoint) {
-      setTimeout(this.updateEndpointState, 500);
+    // If we have changed endpoints just now...
+    if (this.state.currEndpoint !== this.state.prevEndpoint) {
+      // then we shall re-execute the query after render
+      setTimeout(() => $('button.execute-button').click(), 500);
     }
 
     return (
@@ -105,29 +106,27 @@ class ChromeiQL extends React.Component {
     );
   }
 
-  updateEndpointState() {
-    this.setState({
-      currentEndpoint: this.state.newEndpoint,
-      newEndpoint: null
-    });
-    $('button.execute-button').click();
-  }
-
   setEndpoint() {
-    let newEndpoint = window.chromeiqlEndpoint;
-    let setState = this.setState.bind(this);
+    const newEndpoint = chromeiqlEndpoint;
+    const setState = this.setState.bind(this);
+    const currState = this.state;
+
     chrome.storage.local.set(
-      {"chromeiqlEndpoint": newEndpoint},
-      function () {
+      { "chromeiqlEndpoint": newEndpoint },
+      () => {
         if (!chrome.runtime.lastError) {
-          setState({ newEndpoint: newEndpoint });
+          // Move current endpoint to previous, and set current endpoint to new.
+          setState({
+            prevEndpoint: currState.currEndpoint,
+            currEndpoint: newEndpoint
+          });
         }
       }
     );
   }
 
   updateEndpoint(e) {
-    window.chromeiqlEndpoint = e.target.value;
+    chromeiqlEndpoint = e.target.value;
   }
 }
 
