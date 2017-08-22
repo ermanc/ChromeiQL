@@ -8,10 +8,10 @@ import $ from 'jquery';
 let chromeiqlEndpoint;
 
 // Parse the search string to get url parameters.
-let search = window.location.search;
+const search = window.location.search;
 let parameters = {};
 search.substr(1).split('&').forEach(function (entry) {
-  let eq = entry.indexOf('=');
+  const eq = entry.indexOf('=');
   if (eq >= 0) {
     parameters[decodeURIComponent(entry.slice(0, eq))] =
       decodeURIComponent(entry.slice(eq + 1));
@@ -130,10 +130,10 @@ class ChromeiQL extends React.Component {
   }
 }
 
-chrome.storage.local.get("chromeiqlEndpoint", function(storage) {
+chrome.storage.local.get("chromeiqlEndpoint", (storage) =>
   // Render <GraphiQL /> into the body.
   ReactDOM.render(
-    rc(ChromeiQL, { endpoint: storage.chromeiqlEndpoint }),
+    <ChromeiQL endpoint={storage.chromeiqlEndpoint} />,
     document.body
-  );
-});
+  )
+);
