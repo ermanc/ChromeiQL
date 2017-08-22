@@ -1,3 +1,3 @@
-chrome.browserAction.onClicked.addListener(function(tab) {
-  chrome.tabs.create({url: 'chromeiql.html'});
-});
+chrome.browserAction.onClicked.addListener((tab) =>
+  chrome.tabs.create({ url: 'chromeiql.html' })
+);

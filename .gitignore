@@ -3,4 +3,5 @@
 *.zip
 *.pem
 *.crx
-
+node_modules
+dist/

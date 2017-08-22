@@ -1,0 +1,41 @@
+{
+  "name": "chromeiql",
+  "version": "1.0.0",
+  "description": "Thin multi-endpoint wrapper for GraphiQL as a Chrome extension",
+  "main": "js/index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ermanc/ChromeiQL.git"
+  },
+  "keywords": [
+    "graphql",
+    "graphiql",
+    "chromeiql"
+  ],
+  "author": "Erman Celen <ermancelen@gmail.com> (https://github.com/ermanc)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ermanc/ChromeiQL/issues"
+  },
+  "homepage": "https://github.com/ermanc/ChromeiQL#readme",
+  "dependencies": {
+    "graphiql": "^0.11.3",
+    "graphql": "^0.10.5",
+    "jquery": "^3.2.1",
+    "lodash": "^4.17.4",
+    "react": "^15.5.0",
+    "react-dom": "^15.5.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^2.3.2"
+  }
+}
