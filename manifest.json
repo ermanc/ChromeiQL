@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "ChromeiQL",
-  "version": "0.1",
+  "version": "1.0",
   "description": "Chrome app wrapper for the GraphiQL tool",
   "background": {
     "scripts": ["js/background.js"],
